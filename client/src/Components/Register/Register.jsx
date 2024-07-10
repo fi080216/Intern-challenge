@@ -1,14 +1,11 @@
 import React from 'react'
 
-const Register = () =>{
+
+function Register(){
 
     return(
-
-    <div>
-        <a href="/">to login</a>
-    </div>
-
+<div>Register</div>
     )
 }
 
-export default Register
+export default Register;
