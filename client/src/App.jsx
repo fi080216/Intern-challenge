@@ -4,6 +4,8 @@ import Dashboard from './components/Dashboard/Dashbard'
 import Login from './components/Login/Login'
 import Register from './components/Register/Register'
 import { createBrowserRouter, BrowserRouter, RouterProvider } from 'react-router-dom'
+import './App.scss'
+import './App.css'
 
 //Creating routes for different pages 
 const router = createBrowserRouter([
