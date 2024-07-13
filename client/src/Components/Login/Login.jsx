@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import "./Login.css";
 import "../..//App.css";
-import { Link, useNavigate  } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Axios from "axios";
-
 
 //inport video from directory
 import video from "../../assets/video (2).mp4";
@@ -19,7 +18,7 @@ function Login() {
 
   const [loginusername, setloginUsername] = useState("");
   const [loginpassword, setloginPassword] = useState("");
-  const navigateTo =  useNavigate()
+  const navigateTo = useNavigate();
 
   //Onclick we will get what user will enter into the form
 
@@ -29,34 +28,24 @@ function Login() {
       loginusername,
       loginpassword,
     });
-    
-       Axios.post("http://localhost:5000/Login", {
-        loginusername: loginusername,
-        loginpassword: loginpassword
-      }).then((response)=>{
-        console.log(response.data);
 
-        if(response.data.error1 || response.data.error3 ){
-          // direct the user to login to rectify the error
-          navigateTo('/')
+    Axios.post("http://localhost:5000/Login", {
+      loginusername: loginusername,
+      loginpassword: loginpassword,
+    }).then((response) => {
+      console.log(response.data);
 
-        }else if(response.data.error2){
-          // direct the user to register page 
-          navigateTo('/Register')
-
-        }else{
-          // direct the use to dashboard
-          navigateTo('/Dashboard')
-        }
-
-
-
-
-      })
-     
-
-    
-    
+      if (response.data.error1 || response.data.error3) {
+        // direct the user to login to rectify the error
+        navigateTo("/");
+      } else if (response.data.error2) {
+        // direct the user to register page
+        navigateTo("/Register");
+      } else {
+        // direct the use to dashboard
+        navigateTo("/Dashboard");
+      }
+    });
   };
 
   return (
