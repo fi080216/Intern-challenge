@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import './Register.css'
 import '../..//App.css'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 //import video from directory
@@ -15,12 +15,14 @@ import { FaCanadianMapleLeaf } from "react-icons/fa6";
 import { MdMarkEmailRead } from "react-icons/md";
 import Axios from 'axios';
 
+
 function Register() {
 
   //useState to hold our inputs
 const [email, setEmail] = useState('')
 const [username, setUsername] = useState('')
 const [password, setPassword] = useState('')
+const navigateTo =  useNavigate()
 
 //Onclick we will get what user will enter into the form 
 
@@ -29,12 +31,20 @@ const [password, setPassword] = useState('')
     event.preventDefault();
     console.log("Sending request to register user:", { email, username, password });
         try{
-    const response = Axios.post('http://localhost:5000/Register', {
+    Axios.post('http://localhost:5000/Register', {
       email: email,
       username: username,
       password: password
+    }).then((response)=>{
+      console.log(response.data)
+      if(response.data.error1 || response.data.error2){
+        navigateTo('/Register')
+
+      }else{
+        navigateTo('/')
+      }
     });
-    console.log(response)
+    
     } catch(err) {
       console.error("Request failed", err);
     };

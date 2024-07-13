@@ -8,11 +8,14 @@ const cors = require('cors')
 const User = require('./user')
 const bodyParser = require('body-parser')
 const passport = require('passport')
+const LocalStrategy = require('passport-local')
+
 
 // app.use(express)
 app.use(cors())
 app.use(bodyParser.json());
-
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(passport.initialize());
 // Connect to database
 const uri = process.env.MONGODB_CONNECTION_STRING;
 
@@ -26,6 +29,8 @@ mongoose.connect(uri)
 
 
 
+
+
 // create a post request to the register page
 
 
@@ -36,28 +41,26 @@ app.post('/Register', async (req,res)=>{
 const { email, username, password } = req.body;
 
   // Hash the password to 10 round of salting
-const hashedPassword = await bcrypt.hash(password, 10);
+// const hashedPassword = await bcrypt.hash(password, 10);
 
 
   // check for data
-console.log({email, username, hashedPassword})
+console.log({email, username, password})
 
  // Validate input fields
  if (!username || !email || !password) {
   // req.flash("err", "*All the fields are required !");
   // req.flash("name", username);
   // req.flash("email", email);
-  return res.redirect("/Register");
+   return res.send({error1: "Enter all the fields"});
 }
 
 // Check if email already exists
 const userExists = await User.exists({ email: email });
 if (userExists) {
-  // req.flash("err", "*Email already exists !");
-  // req.flash("name", name);
-  // req.flash("email", email);
-  return res.redirect("/Register");
+  return res.send({error2: "This email is already in use"});
 }
+
 
 
 
@@ -65,50 +68,73 @@ if (userExists) {
 const user = new User({
   username: username,
   email: email,
-  password: hashedPassword,
+  password: password,
 });
 
 // Save the user to the database
 user
   .save()
   .then((user) => {
-    return res.redirect("/");
+    return res.send({message: "Registration successful"});
   })
   .catch((err) => {
     // req.flash("err", "Something went wrong !");
-    return res.redirect("/Register");
+    res.send({error3 : " something went wrong"})
   });
  
 
 })
 
-app.post('/', (req, res) =>{
 
-  const { username, password } = req.body;
+//creating route for user authentication and login
 
+app.post('/Login', async (req, res, next) =>{
+
+  
+ const { loginusername, loginpassword } = req.body;
+
+
+
+ console.log({ loginusername, loginpassword })
       // Validate input fields
-      if (!username || !password) {
+      if (!loginusername || !loginpassword) {
         // req.flash("err", "*Enter the required field ");
-        return res.redirect("/");
+          res.send({error1: "input the required data"})
+        
+      }
+      try{
+        const user = await User.findOne({username: loginusername}) ;
+        const password = await User.findOne({password: loginpassword})
+        if (!user){
+          return res.send({error2: "No user found, Kindly Register first"})
+          
+          
+        } else if(user && password){
+          return res.send({message: "User found and is authenticated"})
+        } else{
+          return res.send({error3: "Password is incorrect"})
+        }
+      } catch (error){
+        console.log(error)
       }
 
-      passport.authenticate("local", (err, user, info) => {
-        if (err) {
-          // req.flash("err", info.message);
-          return next(err);
-        }
-        if (!user) {
-          // req.flash("err", info.message);
-          return res.redirect("/");
-        }
-        req.logIn(user, (err) => {
-          if (err) {
-            // req.flash("err", info.message);
-            return next(err);
-          }
-          // return res.redirect(_getRedirectUrl(req));
-        });
-      })(req, res, next);
+      // passport.authenticate("local", (err, user, info) => {
+      //   if (err) {
+      //     // req.flash("err", info.message);
+      //     return next(err);
+      //   }
+      //   if (!user) {
+      //     // req.flash("err", info.message);
+      //     return res.send("....");
+      //   }
+      //   req.logIn(user, (err) => {
+      //     if (err) {
+      //       // req.flash("err", info.message);
+      //       return next(err);
+      //     }
+      //     // return res.redirect(_getRedirectUrl(req));
+      //   });
+      // })(req, res, next);
     
 
 })
