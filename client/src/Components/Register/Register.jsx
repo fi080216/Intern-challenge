@@ -34,7 +34,7 @@ const [password, setPassword] = useState('')
       username: username,
       password: password
     });
-    console.log(response.body)
+    console.log(response)
     } catch(err) {
       console.error("Request failed", err);
     };

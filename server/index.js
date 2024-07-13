@@ -39,7 +39,7 @@ const { email, username, password } = req.body;
 const hashedPassword = await bcrypt.hash(password, 10);
 
 
-//  // check for data
+  // check for data
 console.log({email, username, hashedPassword})
 
  // Validate input fields
@@ -47,7 +47,7 @@ console.log({email, username, hashedPassword})
   // req.flash("err", "*All the fields are required !");
   // req.flash("name", username);
   // req.flash("email", email);
-  return res.redirect("/register");
+  return res.redirect("/Register");
 }
 
 // Check if email already exists
@@ -56,7 +56,7 @@ if (userExists) {
   // req.flash("err", "*Email already exists !");
   // req.flash("name", name);
   // req.flash("email", email);
-  return res.redirect("/register");
+  return res.redirect("/Register");
 }
 
 
@@ -72,11 +72,11 @@ const user = new User({
 user
   .save()
   .then((user) => {
-    return res.redirect("/login");
+    return res.redirect("/");
   })
   .catch((err) => {
     // req.flash("err", "Something went wrong !");
-    return res.redirect("/register");
+    return res.redirect("/Register");
   });
  
 
