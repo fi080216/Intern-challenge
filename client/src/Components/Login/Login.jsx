@@ -4,7 +4,7 @@ import "../..//App.css";
 import { Link, useNavigate } from "react-router-dom";
 import Axios from "axios";
 
-//inport video from directory
+//import video from directory
 import video from "../../assets/video (2).mp4";
 
 //import logo from react-icons
