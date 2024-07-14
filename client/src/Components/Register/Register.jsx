@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState } from "react";
 import "./Register.css";
 import "../..//App.css";
 import { Link, useNavigate } from "react-router-dom";
@@ -21,6 +21,10 @@ function Register() {
   const [password, setPassword] = useState("");
   const navigateTo = useNavigate();
 
+  ////showing message to the user during registration
+  const [RegisterStatus, setRegisterStatus] = useState();
+  const [registerStatusHolder, setregisterStatusHolder] = useState('message')
+
   //Onclick we will get what user will enter into the form
 
   const handleRegister = async (event) => {
@@ -37,9 +41,13 @@ function Register() {
         password: password,
       }).then((response) => {
         console.log(response.data);
-        if (response.data.error1 || response.data.error2) {
+        if (response.data.error1) {
           navigateTo("/Register");
-        } else {
+          setRegisterStatus("Enter all the fields !")
+        } else if(response.data.error2) {
+          navigateTo("/Register");
+          setRegisterStatus("This email is already registered")
+        }else{
           navigateTo("/");
         }
       });
@@ -47,6 +55,21 @@ function Register() {
       console.error("Request failed", err);
     }
   };
+
+
+
+  useEffect(()=>{
+    if(RegisterStatus){
+      setregisterStatusHolder('showMessage')
+      setTimeout(() =>{
+        setregisterStatusHolder('message')
+
+      }, 2000);
+    }
+  }, [RegisterStatus])
+
+
+
 
   return (
     <div className="RegisterPage flex">
@@ -70,10 +93,11 @@ function Register() {
         <div className="formDiv flex">
           <div className="headerDiv">
             <FaCanadianMapleLeaf className="icons" />
-            <h3>Let Us Know You!</h3>
+            <h3>Register here </h3>
           </div>
 
           <form onSubmit={handleRegister}>
+          <span className={registerStatusHolder}>{RegisterStatus}</span>
             <div className="inputDiv">
               <label htmlFor="email">Email</label>
               <div className="input flex">

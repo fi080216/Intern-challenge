@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Login.css";
 import "../..//App.css";
 import { Link, useNavigate } from "react-router-dom";
@@ -20,33 +20,64 @@ function Login() {
   const [loginpassword, setloginPassword] = useState("");
   const navigateTo = useNavigate();
 
+
+
+
+  //showing message to the user during login
+
+  const [LoginStatus, setLoginStatus] = useState();
+  const [statusHolder, setstatusHolder] = useState('message')
+
+
+
+
   //Onclick we will get what user will enter into the form
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    console.log("Sending request to Login the user:", {
-      loginusername,
-      loginpassword,
-    });
+    // console.log("Sending request to Login the user:", {
+    //   loginusername,
+    //   loginpassword,
+    // });
 
     Axios.post("http://localhost:5000/Login", {
       loginusername: loginusername,
       loginpassword: loginpassword,
     }).then((response) => {
-      console.log(response.data);
+      // console.log(response.data);
 
-      if (response.data.error1 || response.data.error3) {
+      if (response.data.error1 ) {
         // direct the user to login to rectify the error
         navigateTo("/");
-      } else if (response.data.error2) {
-        // direct the user to register page
-        navigateTo("/Register");
-      } else {
-        // direct the use to dashboard
+        setLoginStatus("Enter the required fields !")
+      } else if (response.data.error3) {
+        // direct the user to login page to correct the password
+        navigateTo("/");
+        setLoginStatus("Incorrect Password !")
+      } else if(response.data.error2){
+        // direct the use to register page to register
+        navigateTo("/");
+        setLoginStatus("No user found! Register first")
+      } else{
+        // direct the authenticated user to the dashboard
         navigateTo("/Dashboard");
+
       }
     });
   };
+
+
+  useEffect(()=>{
+    if(LoginStatus){
+      setstatusHolder('showMessage')
+      setTimeout(() =>{
+        setstatusHolder('message')
+
+      }, 2000);
+    }
+  }, [LoginStatus])
+
+
 
   return (
     <div className="LoginPage flex">
@@ -70,11 +101,11 @@ function Login() {
         <div className="formDiv flex">
           <div className="headerDiv">
             <FaCanadianMapleLeaf className="icons" />
-            <h3>Welcome Back</h3>
+            <h3>Log into your account</h3>
           </div>
 
           <form onSubmit={handleLogin} className="form grid">
-            <span className="showMessage"></span>
+            <span className={statusHolder}>{LoginStatus}</span>
             <div className="inputDiv">
               <label htmlFor="username">Username</label>
               <div className="input flex">

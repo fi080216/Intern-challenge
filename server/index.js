@@ -34,7 +34,7 @@ app.post("/Register", async (req, res) => {
   // const hashedPassword = await bcrypt.hash(password, 10);
 
   // check for data in console
-  console.log({ email, username, password });
+  // console.log({ email, username, password });
 
   // Validate input fields
   if (!username || !email || !password) {
@@ -61,7 +61,7 @@ app.post("/Register", async (req, res) => {
       return res.send({ message: "Registration successful" });
     })
     .catch((err) => {
-      res.send({ error3: " something went wrong" });
+      res.send({ error3: "Something went wrong" });
     });
 });
 
@@ -70,7 +70,7 @@ app.post("/Register", async (req, res) => {
 app.post("/Login", async (req, res) => {
   const { loginusername, loginpassword } = req.body;
 
-  console.log({ loginusername, loginpassword });
+  // console.log({ loginusername, loginpassword });
   // Validate input fields
   if (!loginusername || !loginpassword) {
     res.send({ error1: "input the required data" });
