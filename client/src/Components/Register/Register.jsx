@@ -96,7 +96,7 @@ function Register() {
             <h3>Register here </h3>
           </div>
 
-          <form onSubmit={handleRegister}>
+          <form onSubmit={handleRegister} className="form grid">
           <span className={registerStatusHolder}>{RegisterStatus}</span>
             <div className="inputDiv">
               <label htmlFor="email">Email</label>
@@ -147,10 +147,10 @@ function Register() {
             </div>
 
             <button type="submit" className="btn flex">
-              <span>
+              
                 Register
                 <BiLogIn className="icon" />
-              </span>
+              
             </button>
           </form>
 
