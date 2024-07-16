@@ -1,0 +1,16 @@
+.sideBar{
+    background: var(--whiteColor);
+    box-shadow: 1px 0px 4px var(--greyText);
+    width: 18%;
+    height: 100%;
+    gap: 3rem;
+    overflow: auto;
+    background: var(--greyText);
+
+    .logoDiv{
+      padding: 1.5rem 1.5rem 0;
+      cursor: pointer;
+
+      
+    }
+  }
